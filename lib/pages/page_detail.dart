@@ -11,26 +11,26 @@ class TeamDetailWidget extends StatefulWidget {
 }
 
 class _TeamDetailWidgetState extends State<TeamDetailWidget> {
-  late String name;
-  late int founded;
+  String? name;
+  int? founded;
   String country = '';
   String venue = '';
   String? imagePath;
 
   @override
   void initState() {
-    final data = widget.dataSource.getDetailTeam(widget.id);
-    if (data != null) {
-      name = data['name'];
-      founded = data['founded'];
-      country = data['country'];
-      venue = data['venue'];
-      imagePath = data['imagePath'];
-    } else {
-      name = 'Not Found';
-      founded = 0;
-    }
-    super.initState();
+    widget.dataSource.fetchDetailTeam(widget.id).then((value) {
+      if (value != null) {
+        setState(() {
+          name = value.data.name;
+          founded = value.data.founded;
+          country = value.data.country.name;
+          venue = value.data.venue.name;
+          imagePath = value.data.imagePath;
+        });
+      }
+      super.initState();
+    });
   }
 
   @override
